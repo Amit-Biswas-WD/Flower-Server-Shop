@@ -35,6 +35,12 @@ async function connectDB() {
       res.send(result);
     });
 
+    app.get("/product", async (req, res) => {
+      const cursor = productCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     console.log("✅ Connected to MongoDB");
   } catch (error) {
     console.error("❌ MongoDB Connection Error:", error);
