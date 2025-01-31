@@ -41,6 +41,13 @@ async function connectDB() {
       res.send(result);
     });
 
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
+
     // product delete
     app.delete("/product/:id", async (req, res) => {
       const id = req.params.id;
