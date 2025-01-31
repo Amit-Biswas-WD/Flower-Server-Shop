@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -41,19 +41,28 @@ async function connectDB() {
       res.send(result);
     });
 
-    console.log("✅ Connected to MongoDB");
+    // product delete
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("delete id", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    console.log("Connected to MongoDB");
   } catch (error) {
-    console.error("❌ MongoDB Connection Error:", error);
+    console.error("MongoDB Connection Error:", error);
   }
 }
 connectDB();
 
 // API Routes
 app.get("/", (req, res) => {
-  res.send("✅ Server is Running");
+  res.send("Server is Running");
 });
 
 // Start Server
 app.listen(port, () => {
-  console.log(`🚀 Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
