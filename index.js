@@ -41,10 +41,33 @@ async function connectDB() {
       res.send(result);
     });
 
+    // single Product
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.findOne(query);
+      res.send(result);
+    });
+
+    // put /  edit value
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const product = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateProduct = {
+        $set: {
+          productName: product.productName,
+          price: product.price,
+          photo: product.photo,
+          description: product.description,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        updateProduct,
+        options
+      );
       res.send(result);
     });
 
